@@ -1,2 +1,6 @@
 # mapdraw
 simple static html page showing a map that you can draw on, and then share the drawing, all client side
+
+
+# demo
+[https://nyman.re/mapdraw/#l=60.172108%2C24.941458&z=16&d=LU8xSyNhFJz57h...](https://nyman.re/mapdraw/#l=60.172108%2C24.941458&z=16&d=LU8xSyNhFJz57hLD3e13gctmi900d9uYFY5UXtJcdWSb5RqTJmW2sdxtRBsXQRRBCahVQhARQd0iNhb5A64iViKpBHHxB4iFFoJfVGbeq2bmvRHZjtjbPK5Gd6lx93kwkZ9dOzquxgepcUDLw3-0MIsVosvxniu3fc_13ErTbGrh91DrM5NwIiV2BCKBeyIhYiKEC0vDNDwEH_Ztyi5r2_wz15yvBeVgqmU15D84chK_FCZhQoNdK4flmHZCe0lYfSETURwJ2RHFaxZ85FF6k5XUvMOUTq4uG8WgEBQbsiGnc07WVOf7RI_qPcUfoe6bru5qli7fTToq5t9Tts5Y7_J3u-RktBnoX6PnQfX-KDWeqPXGLaw91rYoF9DET-RQ0fRvVy-D6v5uathDgSHxSCwJJALnAg_EiIg4bq6EKuvkJjVWeZHJxpw6pD3kuJlih9YGC2Heh9S_XKrEw9vUqI8-BTGXGXOdPS522I7o-Y6bsV4B)
