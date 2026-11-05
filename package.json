@@ -1,0 +1,23 @@
+{
+  "name": "signalk-tracks-sharing",
+  "version": "0.1.0",
+  "description": "Signal K webapp for viewing tracks from the Signal K tracks API on a map, with shareable URLs",
+  "license": "BSD-2-Clause",
+  "keywords": [
+    "signalk-webapp",
+    "signalk-category-utility"
+  ],
+  "files": [
+    "public"
+  ],
+  "signalk": {
+    "displayName": "Tracks Sharing",
+    "appIcon": "./icon.svg"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev:generate": "node dev/generate-tracks.js",
+    "dev:up": "docker compose -f dev/docker-compose.yml up -d",
+    "dev:down": "docker compose -f dev/docker-compose.yml down"
+  }
+}

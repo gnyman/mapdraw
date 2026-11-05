@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tracks Sharing</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; height: 100vh; overflow: hidden; font-size: 13px; }
+      #map { position: absolute; inset: 0 0 96px 0; }
+      button { padding: 5px 9px; border: 1px solid #c7c7cc; border-radius: 8px; background: #f4f4f8; cursor: pointer; font-size: 12px; font-weight: 600; }
+      button:hover { background: #fff; }
+      button.active { background: #007aff; color: #fff; border-color: #007aff; }
+      #panel { position: absolute; top: 10px; right: 10px; z-index: 1000; width: 260px; background: rgba(255,255,255,.95); border-radius: 12px; box-shadow: 0 4px 30px rgba(0,0,0,.15); padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+      #panel h1 { font-size: 14px; }
+      #panel label { display: flex; align-items: center; gap: 6px; }
+      #panel input[type=text] { flex: 1; min-width: 0; padding: 3px 5px; }
+      .row { display: flex; gap: 6px; flex-wrap: wrap; }
+      #status { color: #555; min-height: 2.6em; }
+      #liveState.off { color: #c0392b; }
+      #timeline { position: absolute; left: 0; right: 0; bottom: 0; height: 96px; background: #fff; border-top: 1px solid #d1d1d6; padding: 6px 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; }
+      #timelineBar { position: relative; flex: 1; background: #eef0f6; border-radius: 6px; cursor: crosshair; user-select: none; touch-action: none; }
+      #selection { position: absolute; top: 0; bottom: 0; background: rgba(0,122,255,.3); border-left: 2px solid #007aff; border-right: 2px solid #007aff; display: none; pointer-events: none; }
+      .tick { position: absolute; top: 0; bottom: 0; border-left: 1px solid #c7c7cc; pointer-events: none; }
+      .tick span { position: absolute; bottom: 1px; left: 3px; font-size: 10px; color: #666; white-space: nowrap; }
+      #timeLabel { margin-left: auto; color: #333; align-self: center; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <div id="panel">
+      <h1>Tracks Sharing</h1>
+      <label>API <input type="text" id="apiBase" /></label>
+      <div class="row">
+        <button id="fetchBtn" title="Fetch tracks for the current map view and time range">Fetch tracks</button>
+        <button id="drawBtn" title="Draw on the map; disables continuous update">Draw</button>
+        <button id="clearBtn" title="Remove drawings">Clear drawings</button>
+      </div>
+      <label><input type="checkbox" id="liveChk" /> <span id="liveState"></span></label>
+      <div id="status"></div>
+    </div>
+
+    <div id="timeline">
+      <div class="row">
+        <button data-preset="10y">10 y</button>
+        <button data-preset="5y">5 y</button>
+        <button data-preset="2y">2 y</button>
+        <button data-preset="1y">1 y</button>
+        <button data-preset="6m">6 mo</button>
+        <button data-preset="3m">3 mo</button>
+        <button data-preset="1m">1 mo</button>
+        <button id="zoomIn" title="Zoom timeline in">+</button>
+        <button id="zoomOut" title="Zoom timeline out">&minus;</button>
+        <span id="timeLabel"></span>
+      </div>
+      <div id="timelineBar"><div id="selection"></div></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uzip@0.20201231.0/UZIP.min.js"></script>
+    <script src="codec.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

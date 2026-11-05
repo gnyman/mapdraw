@@ -1,0 +1,21 @@
+# Test environment: a Signal K server with the tracks plugin and this webapp.
+#   docker compose -f dev/docker-compose.yml up -d
+#   node dev/generate-tracks.js http://localhost:3000   # fill the tracks database
+# then open http://localhost:3000/signalk-tracks-sharing/
+services:
+  signalk:
+    image: signalk/signalk-server:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - signalk-config:/home/node/.signalk
+      - ..:/webapp:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        cd /home/node/.signalk
+        [ -f package.json ] || echo '{"name":"signalk-config","version":"0.0.1","dependencies":{}}' > package.json
+        npm install --no-audit --no-fund @signalk/tracks-plugin /webapp
+        exec /home/node/signalk/bin/signalk-server -c /home/node/.signalk
+volumes:
+  signalk-config:
