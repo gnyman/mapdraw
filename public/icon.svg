@@ -1,1 +1,29 @@
-<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" width="157.2" height="111.4" viewBox="0 0 157.2 111.4"><defs><style>.cls-1{fill:#039;}.cls-2{fill:#fc0;}</style></defs><title>signal-k-logo-image</title><path class="cls-1" d="M.61,75.88c3-1.87,10.88,6.63,21.71,14.36a48.2,48.2,0,0,0,29,8.15C68,97.23,75,94,89.12,86.62c11.09-5.78,22.27-13.94,31.82-19.76a89.66,89.66,0,0,1,20.11-8.93c9.95-3.08,16.15-.51,16.15.49,0,1.71-11.75,7.28-20.69,13.32C125,79.51,119.63,83.27,117,85c-7.52,4.93-20.39,13.41-25.95,16.09-8.69,4.19-18.63,8.23-30.9,9.78-16.07,2-33.31-1.88-44.71-10.55C1.72,89.88-1.55,77.25.61,75.88" transform="translate(0 0)"/><path class="cls-1" d="M23.11,85l14.23-36.8C43.09,33.26,45.56,25.35,54.5,22c4.66-1.73,13-.16,16,.07,4.41.34,5.47-.95,6.46-3.45,2.12-5.3,4-9.54,3.67-10.41C80.56,8,79.16,7.64,79,7c-.1-.38,2.62-6.6,3.28-7S106,8.42,106.19,9.39s-1.93,6.65-2.8,7.13c-.68.38-1.84-.77-2.7-.29-.6.34-1.47,2.85-4.24,9.93-.87,2.22-.17,4.72,2.22,6.66,3.08,2.5,9.1,6.3,12,11.28,3.77,6.55,1.93,10.5-3.56,24.2l-.39,1.06s-9.43,7.92-26.62,16.06a86.18,86.18,0,0,1-26.89,7.86c-1.2.14-4.74-2.68-7.6-3s-10.65.87-11.31.63a52.77,52.77,0,0,1-11.14-6" transform="translate(0 0)"/><path class="cls-2" d="M74.56,39.08s-12.62-6.71-17.56-3S34.25,91,34.25,91a47.67,47.67,0,0,0,6.57,1.86,33.23,33.23,0,0,0,8.15.75c2.3,0,4.19-.28,4.19-.28Z" transform="translate(0 0)"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>Tracks Sharing</title>
+  <defs>
+    <clipPath id="tile"><rect width="512" height="512" rx="96"/></clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <!-- chart: white deep water, blue shallows, buff land -->
+    <rect width="512" height="512" fill="#f7fbfe"/>
+    <g stroke="#9fb9cf" stroke-width="2" opacity=".5">
+      <path d="M128 0V512M256 0V512M384 0V512M0 128H512M0 256H512M0 384H512"/>
+    </g>
+    <path d="M0 0H330C305 55 270 85 252 128C232 172 192 196 160 222C126 250 106 296 62 318C38 330 16 330 0 342Z" fill="#bfdcf1"/>
+    <path d="M0 0H392C360 80 318 120 300 165C280 215 236 250 196 280C150 315 120 372 60 400C36 411 16 414 0 420" fill="none" stroke="#7fa6c8" stroke-width="3" stroke-dasharray="14 8"/>
+    <path d="M0 0H250C232 42 202 64 190 98C176 136 138 146 112 172C86 198 70 232 38 248C24 255 10 254 0 264Z" fill="#efd9a0" stroke="#a88a4a" stroke-width="3"/>
+    <ellipse cx="430" cy="104" rx="54" ry="42" fill="#bfdcf1"/>
+    <path d="M410 92C420 76 446 80 452 96C458 112 440 126 424 122C410 118 402 104 410 92Z" fill="#efd9a0" stroke="#a88a4a" stroke-width="3"/>
+    <!-- track -->
+    <path d="M26 486C80 440 118 412 166 392S246 340 256 290S300 214 352 196S426 170 462 150" fill="none" stroke="#c2187e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="26" cy="486" r="14" fill="#c2187e"/>
+    <!-- share symbol -->
+    <circle cx="378" cy="384" r="112" fill="#0d4f8b" stroke="#fff" stroke-width="12"/>
+    <g fill="#fff">
+      <path d="M332 384L420 334M332 384L420 434" stroke="#fff" stroke-width="16"/>
+      <circle cx="332" cy="384" r="27"/>
+      <circle cx="422" cy="332" r="27"/>
+      <circle cx="422" cy="436" r="27"/>
+    </g>
+  </g>
+</svg>
