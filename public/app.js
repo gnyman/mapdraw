@@ -3,6 +3,7 @@
   const DAY = 86400000;
   const PALETTE = ["#FF3B30", "#FF9500", "#FFCC00", "#4CD964", "#5AC8FA", "#007AFF", "#5856D6", "#AF52DE", "#FF2D55", "#8E8E93", "#FF6B81", "#2ECC71", "#1ABC9C", "#3498DB", "#9B59B6", "#34495E"];
   const PRESET_DAYS = { "10y": 3652, "5y": 1826, "2y": 730, "1y": 365, "6m": 183, "3m": 91, "1m": 30 };
+  const PUBLIC_BASE = "https://tkurki.github.io/trackdraw/";
   const $ = (id) => document.getElementById(id);
 
   const onSignalK = location.pathname.indexOf("/signalk-tracks-sharing/") === 0;
@@ -16,6 +17,8 @@
     drawing: false,
     serverPaths: [],
     userPaths: [],
+    // [from, to] per fetched server path; the URL carries no times
+    trackTimes: [],
     rangeStart: 0,
     rangeEnd: 0,
     selStart: null,
@@ -74,13 +77,49 @@
       state.suppressMove = false;
     }
     layer.clearLayers();
+    const serverCount = paths.filter(C.isServerPath).length;
+    const times = state.trackTimes.length === serverCount ? state.trackTimes : [];
+    let serverIndex = 0;
     paths.forEach((p) => {
-      L.polyline(
+      const line = L.polyline(
         p.points.map((pt) => [pt.lat, pt.lng]),
         { color: PALETTE[p.colorIndex % 16], weight: [2, 3, 5, 8][p.strokeWidthIndex] || 3, interactive: false },
       ).addTo(layer);
+      const range = C.isServerPath(p) ? times[serverIndex++] : null;
+      if (range) addTrackInfo(line, range[0], range[1]);
     });
     return paths;
+  }
+
+  /** Hover shows the track's time range; click offers to show only that range. */
+  function addTrackInfo(line, from, to) {
+    const weight = line.options.weight;
+    const label = fmt(from) + " → " + fmt(to) + " (" + duration(to - from) + ")";
+    // a wider invisible line is easier to hit than the drawn one
+    const hit = L.polyline(line.getLatLngs(), { weight: 14, opacity: 0 }).addTo(layer);
+    hit.bindTooltip(label, { sticky: true });
+    hit.on("mouseover", () => line.setStyle({ weight: weight + 3 }));
+    hit.on("mouseout", () => line.setStyle({ weight }));
+    hit.on("click", (ev) => {
+      if (state.drawing) return;
+      const content = L.DomUtil.create("div");
+      L.DomUtil.create("div", "", content).textContent = label;
+      const button = L.DomUtil.create("button", "", content);
+      button.textContent = "Show only this time range";
+      button.style.marginTop = "6px";
+      const popup = L.popup().setLatLng(ev.latlng).setContent(content).openOn(map);
+      button.addEventListener("click", () => {
+        map.closePopup(popup);
+        showOnly(from, to);
+      });
+    });
+  }
+
+  function duration(ms) {
+    const min = Math.round(ms / 60000);
+    if (min < 60) return min + " min";
+    if (min < 48 * 60) return Math.floor(min / 60) + " h " + (min % 60) + " min";
+    return Math.round(min / 1440) + " d";
   }
 
   function setLive(on) {
@@ -117,14 +156,17 @@
     const to = state.selEnd !== null ? state.selEnd : state.rangeEnd;
     const sw = L.latLng(bbox[1], bbox[0]);
     const ne = L.latLng(bbox[3], bbox[2]);
-    const epsilon = Math.max(1, Math.round(sw.distanceTo(ne) / 800));
+    // half a screen pixel, in metres
+    const pixels = map.getSize().distanceTo(L.point(0, 0)) || 1000;
+    const epsilon = Math.max(1, Math.round(sw.distanceTo(ne) / pixels / 2));
     const q = new URLSearchParams({
       bbox: bbox.join(","),
       from: new Date(from).toISOString(),
       to: new Date(to).toISOString(),
       simplify: "true",
       epsilon: String(epsilon),
-      maxPoints: "2000",
+      maxPoints: "200000",
+      times: "true",
     });
     const base = apiInput.value.trim().replace(/\/+$/, "");
     setStatus("Fetching…");
@@ -133,7 +175,8 @@
       if (!res.ok) throw new Error("HTTP " + res.status);
       const json = await res.json();
       if (seq !== state.fetchSeq || !state.live) return;
-      state.serverPaths = C.featuresToPaths(json, C.toleranceForBbox(bbox));
+      state.serverPaths = C.featuresToPaths(json);
+      state.trackTimes = state.serverPaths.map((p) => (Number.isFinite(p.from) ? [p.from, p.to] : null));
       writeUrl();
       applyHash(false);
       setStatus(state.serverPaths.length + " track segments, " + (json.features || []).length + " tracks");
@@ -160,6 +203,7 @@
     // replaceState does not fire this, so any event here is a manual edit
     setLive(false);
     clearTimeout(state.fetchTimer);
+    state.trackTimes = [];
     applyHash(true);
   });
 
@@ -178,6 +222,16 @@
     state.userPaths = [];
     writeUrl();
     applyHash(false);
+  });
+  $("copyBtn").addEventListener("click", async () => {
+    const url = PUBLIC_BASE + location.hash;
+    try {
+      // the clipboard API needs a secure context, which a plain http server is not
+      await navigator.clipboard.writeText(url);
+      setStatus("Public URL copied");
+    } catch (e) {
+      window.prompt("Copy the public URL", url);
+    }
   });
 
   /* ---------- drawing ---------- */
@@ -238,6 +292,15 @@
 
   function pct(t) {
     return ((t - state.rangeStart) / (state.rangeEnd - state.rangeStart)) * 100;
+  }
+
+  /** Zoom the timeline to a track's time range, padded, and select exactly that range. */
+  function showOnly(from, to) {
+    const pad = Math.max((to - from) / 10, 10 * 60000);
+    setRange(from - pad, to + pad);
+    state.selStart = Math.max(from, state.rangeStart);
+    state.selEnd = Math.min(to, state.rangeEnd);
+    renderTimeline();
   }
 
   function renderTimeline() {
@@ -304,7 +367,9 @@
 
   let dragFrom = null;
   bar.addEventListener("pointerdown", (ev) => {
-    dragFrom = timeAt(ev);
+    const handle = ev.target.dataset.handle;
+    // a handle drags one edge: the same as a new selection anchored at the other edge
+    dragFrom = handle === "start" ? state.selEnd : handle === "end" ? state.selStart : timeAt(ev);
     bar.setPointerCapture(ev.pointerId);
   });
   bar.addEventListener("pointermove", (ev) => {

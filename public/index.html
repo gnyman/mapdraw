@@ -25,6 +25,10 @@
       #timeline { position: absolute; left: 0; right: 0; bottom: 0; height: 96px; background: #fff; border-top: 1px solid #d1d1d6; padding: 6px 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; }
       #timelineBar { position: relative; flex: 1; background: #eef0f6; border-radius: 6px; cursor: crosshair; user-select: none; touch-action: none; }
       #selection { position: absolute; top: 0; bottom: 0; background: rgba(0,122,255,.3); border-left: 2px solid #007aff; border-right: 2px solid #007aff; display: none; pointer-events: none; }
+      .handle { position: absolute; top: 0; bottom: 0; width: 12px; cursor: ew-resize; pointer-events: auto; }
+      .handle::after { content: ""; position: absolute; top: 50%; left: 3px; width: 6px; height: 22px; margin-top: -11px; background: #007aff; border-radius: 3px; }
+      .handle[data-handle=start] { left: -7px; }
+      .handle[data-handle=end] { right: -7px; }
       .tick { position: absolute; top: 0; bottom: 0; border-left: 1px solid #c7c7cc; pointer-events: none; }
       .tick span { position: absolute; bottom: 1px; left: 3px; font-size: 10px; color: #666; white-space: nowrap; }
       #timeLabel { margin-left: auto; color: #333; align-self: center; }
@@ -40,6 +44,7 @@
         <button id="fetchBtn" title="Fetch tracks for the current map view and time range">Fetch tracks</button>
         <button id="drawBtn" title="Draw on the map; disables continuous update">Draw</button>
         <button id="clearBtn" title="Remove drawings">Clear drawings</button>
+        <button id="copyBtn" title="Copy a link to the current view on https://tkurki.github.io/trackdraw/">Copy public URL</button>
       </div>
       <label><input type="checkbox" id="liveChk" /> <span id="liveState"></span></label>
       <div id="status"></div>
@@ -58,7 +63,9 @@
         <button id="zoomOut" title="Zoom timeline out">&minus;</button>
         <span id="timeLabel"></span>
       </div>
-      <div id="timelineBar"><div id="selection"></div></div>
+      <div id="timelineBar">
+        <div id="selection"><div class="handle" data-handle="start"></div><div class="handle" data-handle="end"></div></div>
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>

@@ -26,14 +26,29 @@ test("simplify drops collinear points and keeps ends", () => {
   assert.strictEqual(C.simplify(pts, 0).length, 5);
 });
 
-test("featuresToPaths converts and simplifies MultiLineStrings", () => {
-  const out = C.featuresToPaths(
-    { features: [{ geometry: { type: "MultiLineString", coordinates: [[[0, 0], [0, 1], [0, 2]], [[5, 5]]] } }] },
-    0.1,
-  );
+test("featuresToPaths converts MultiLineStrings and drops single points", () => {
+  const out = C.featuresToPaths({
+    features: [{ geometry: { type: "MultiLineString", coordinates: [[[0, 0], [0, 1], [0, 2]], [[5, 5]]] } }],
+  });
   assert.strictEqual(out.length, 1);
-  assert.strictEqual(out[0].points.length, 2);
+  assert.strictEqual(out[0].points.length, 3);
   assert.ok(C.isServerPath(out[0]));
+});
+
+test("featuresToPaths takes track time ranges from coordTimes", () => {
+  const out = C.featuresToPaths({
+    features: [
+      {
+        geometry: { type: "MultiLineString", coordinates: [[[5, 5]], [[0, 0], [0, 1], [0, 2]]] },
+        properties: {
+          coordTimes: [["2026-01-01T00:00:00Z"], ["2026-01-02T00:00:00Z", "2026-01-02T01:00:00Z", "2026-01-02T02:00:00Z"]],
+        },
+      },
+    ],
+  });
+  assert.strictEqual(out.length, 1);
+  assert.strictEqual(out[0].from, Date.parse("2026-01-02T00:00:00Z"));
+  assert.strictEqual(out[0].to, Date.parse("2026-01-02T02:00:00Z"));
 });
 
 test("toleranceForBbox handles antimeridian", () => {

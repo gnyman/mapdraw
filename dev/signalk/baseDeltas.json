@@ -1,0 +1,17 @@
+[
+  {
+    "context": "vessels.self",
+    "updates": [
+      {
+        "values": [
+          {
+            "path": "",
+            "value": {
+              "uuid": "urn:mrn:signalk:uuid:736424c1-7463-4223-981a-61266322e0a3"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

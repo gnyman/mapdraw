@@ -1,0 +1,8 @@
+# Signal K server config dir for the dev environment. Only the fixed vessel
+# identity and the tracks plugin config are tracked; the rest is server state.
+*
+!.gitignore
+!baseDeltas.json
+!plugin-config-data/
+plugin-config-data/*
+!plugin-config-data/tracks.json

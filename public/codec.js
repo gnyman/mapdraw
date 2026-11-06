@@ -175,21 +175,28 @@
     return Math.max(width, bbox[3] - bbox[1]) / 800;
   }
 
-  /** TracksResponse (FeatureCollection of MultiLineString) -> server paths. */
-  function featuresToPaths(collection, tolerance) {
+  /** TracksResponse (FeatureCollection of MultiLineString) -> server paths.
+   * With `times=true` each path also gets `from`/`to` (ms) from `coordTimes`;
+   * these are not part of the URL encoding. */
+  function featuresToPaths(collection) {
     const paths = [];
     ((collection && collection.features) || []).forEach((feature) => {
       const geometry = feature.geometry;
       if (!geometry || !geometry.coordinates) return;
       const lines =
         geometry.type === "LineString" ? [geometry.coordinates] : geometry.coordinates;
-      lines.forEach((line) => {
-        const points = simplify(
-          line.map((c) => ({ lat: c[1], lng: c[0] })),
-          tolerance,
-        );
+      const coordTimes = (feature.properties && feature.properties.coordTimes) || [];
+      const timesOf = geometry.type === "LineString" ? [coordTimes] : coordTimes;
+      lines.forEach((line, i) => {
+        const points = line.map((c) => ({ lat: c[1], lng: c[0] }));
         if (points.length >= 2) {
-          paths.push({ type: "line", colorIndex: SERVER_COLOR, strokeWidthIndex: 1, points });
+          const path = { type: "line", colorIndex: SERVER_COLOR, strokeWidthIndex: 1, points };
+          const times = timesOf[i];
+          if (times && times.length) {
+            path.from = Date.parse(times[0]);
+            path.to = Date.parse(times[times.length - 1]);
+          }
+          paths.push(path);
         }
       });
     });

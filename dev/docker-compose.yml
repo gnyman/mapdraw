@@ -2,13 +2,16 @@
 #   docker compose -f dev/docker-compose.yml up -d
 #   node dev/generate-tracks.js http://localhost:3000   # fill the tracks database
 # then open http://localhost:3000/signalk-tracks-sharing/
+# Server config and the tracks database live in dev/signalk/, which fixes the
+# own vessel identity (baseDeltas.json) so recorded tracks stay the own
+# vessel's and are not pruned as AIS targets.
 services:
   signalk:
     image: signalk/signalk-server:latest
     ports:
       - "3000:3000"
     volumes:
-      - signalk-config:/home/node/.signalk
+      - ./signalk:/home/node/.signalk
       - ..:/webapp:ro
     entrypoint: ["/bin/sh", "-c"]
     command:
@@ -16,6 +19,4 @@ services:
         cd /home/node/.signalk
         [ -f package.json ] || echo '{"name":"signalk-config","version":"0.0.1","dependencies":{}}' > package.json
         npm install --no-audit --no-fund @signalk/tracks-plugin /webapp
-        exec /home/node/signalk/bin/signalk-server -c /home/node/.signalk
-volumes:
-  signalk-config:
+        exec /home/node/signalk/node_modules/.bin/signalk-server
