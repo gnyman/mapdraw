@@ -12,7 +12,10 @@
   ],
   "signalk": {
     "displayName": "Tracks Sharing",
-    "appIcon": "./icon.svg"
+    "appIcon": "./icon.svg",
+    "recommends": [
+      "@signalk/tracks-plugin"
+    ]
   },
   "scripts": {
     "test": "node --test test/*.test.js",
