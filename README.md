@@ -10,6 +10,8 @@ Demo: https://tkurki.github.io/trackdraw/#l=59.885462%2C23.311007&z=12&d=AWQAm_8
 
 ## 2. Signal K webapp (`public/`)
 
+![Tracks Sharing webapp: a track with its time range shown on hover, and the timeline selection](public/screenshot.png)
+
 Installable as a Signal K server webapp (`signalk-webapp` keyword, served at `/signalk-tracks-sharing/`). It shows a map and fetches tracks from the Signal K Tracks API (`/signalk/v2/api/tracks`, provided for example by `@signalk/tracks-plugin`) for the current map bbox and the selected time range. When not served by a Signal K server the API defaults to `https://demo.signalk.io`; the API base can be changed in the panel.
 
 - Tracks are simplified on the server (`simplify`/`epsilon`/`maxPoints`) with a tolerance of half a screen pixel for the current view.

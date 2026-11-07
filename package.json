@@ -13,6 +13,9 @@
   "signalk": {
     "displayName": "Tracks Sharing",
     "appIcon": "./icon.svg",
+    "screenshots": [
+      "./screenshot.png"
+    ],
     "recommends": [
       "@signalk/tracks-plugin"
     ]
