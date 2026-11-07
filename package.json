@@ -1,6 +1,6 @@
 {
   "name": "signalk-tracks-sharing",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Signal K webapp for viewing tracks from the Signal K tracks API on a map, with shareable URLs",
   "license": "BSD-2-Clause",
   "keywords": [
